@@ -310,6 +310,8 @@ document.getElementById("timeline").addEventListener("click",e=>{
 /* ---------- site sections ---------- */
 document.getElementById("sites").innerHTML = SITES.map(s=>{
   const ns=NOTES.filter(n=>n.s===s.c).sort((a,b)=>a.d.localeCompare(b.d));
+  // visits are listed newest first; ns stays chronological for the date range above
+  const nsDesc=[...ns].sort((a,b)=> b.d.localeCompare(a.d) || b.id-a.id);
   const iss=ns.filter(n=>n.t==="issue").length;
   const pns=PIPE.filter(p=>p.s===s.c).sort((a,b)=>b.ed.localeCompare(a.ed));
   const pblock = pns.length
@@ -321,7 +323,7 @@ document.getElementById("sites").innerHTML = SITES.map(s=>{
     <p class="vb" style="margin:8px 0 14px">${s.d}</p>
     ${pblock}
     <div class="visits">` +
-    ns.map(n=>`<div class="visit" id="n${n.id}" data-t="${n.t}">
+    nsDesc.map(n=>`<div class="visit" id="n${n.id}" data-t="${n.t}">
         <div class="vd">${fmt(n.d)}<small>${n.w}</small></div>
         <div><span class="badge ${n.t}">${LABEL[n.t]}</span></div>
         <div><p class="vt">${n.ti}</p><p class="vb">${n.b}</p></div>
